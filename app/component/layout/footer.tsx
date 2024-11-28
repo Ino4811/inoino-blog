@@ -1,7 +1,7 @@
 import { css, Style } from 'hono/css';
 
 const footerClass = css`
-  background-color: #333;
+  background-color: #444444;;
   color: #fff;
   text-align: center;
   padding: 15px 20px;
