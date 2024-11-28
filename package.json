@@ -9,8 +9,13 @@
   },
   "private": true,
   "dependencies": {
+    "@hono/vite-ssg": "^0.1.0",
+    "@types/mdast": "^4.0.4",
     "hono": "^4.6.2",
-    "honox": "^0.1.23"
+    "honox": "^0.1.23",
+    "remark": "^15.0.1",
+    "remark-frontmatter": "^5.0.0",
+    "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240529.0",
