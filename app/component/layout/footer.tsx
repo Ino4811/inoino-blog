@@ -7,7 +7,6 @@ const footerClass = css`
   padding: 15px 20px;
   position: relative;
   bottom: 0;
-  width: 100%;
 `;
 
 

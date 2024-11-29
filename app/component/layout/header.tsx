@@ -30,7 +30,7 @@ export const Header = () => {
     <header class={headerClass}>
       <div class={log}>
         <img height="36px" src="/static/favicon.ico" />
-        <b> inoino-tech-blog</b>
+        <b> inoino-blog</b>
       </div>
       <nav>
         <a href="/" class={linkClass}>Home</a>

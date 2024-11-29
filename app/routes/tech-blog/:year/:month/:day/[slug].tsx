@@ -1,9 +1,10 @@
 import { createRoute } from 'honox/factory';
 import { extractParamsFromPath, getAllBlogPaths, getBlogContent } from '../../../../../lib/blogUtil';
-import { mdParser } from '../../../../../lib/mdParser';
-import { MdastRenderer } from '../../../../../component/ui-elements/mdastRenderer';
+import { filterOutYaml, getMetadata, mdParser } from '../../../../../lib/astUtil';
 import { ssgParams } from 'hono/ssg';
 import { TECH_BLOG_PATH } from '../../../../../lib/const';
+import { BlogContent } from '../../../../../component/ui-parts/blogContent';
+import { BlogHeader } from '../../../../../component/ui-parts/blogHeader';
 
 
 export default createRoute(
@@ -16,20 +17,22 @@ export default createRoute(
     const params = paths
       .map(extractParamsFromPath)
       .filter((param): param is { year: string; month: string; day: string; slug: string } => param !== null);
-
-    console.log(params)
+    
     return params;
   }),
   async (c) => {
     const { year, month, day, slug } = c.req.param();
-    
     const blogContent = await getBlogContent({ year, month, day, slug });
-      
     const postAst = blogContent ? await mdParser(blogContent) : undefined;
+    const metadata = postAst ? getMetadata(postAst) : undefined;
+    const contentAst = postAst ? filterOutYaml(postAst) : undefined;
 
-    if (postAst) {
+    if (contentAst && metadata) {
       return c.render(
-          <MdastRenderer nodes={postAst.children} />
+        <>
+          <BlogHeader metadata={metadata} />
+          <BlogContent contentAst={contentAst} />
+        </>
       )
     } else {
       return c.notFound();

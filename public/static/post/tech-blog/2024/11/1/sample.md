@@ -1,3 +1,12 @@
+---
+title: "記事のタイトル"
+date: "2024-11-30"
+tags:
+  - programming
+  - markdown
+---
+
+
 # クエリパラメータ&パスパラメータ
 
 (以下GPTに作成)
@@ -33,11 +42,14 @@ https://zenn.dev/y__adler/articles/7a73cdf4c1987a
 - **例**:
     
     ```
+    <https://example.com/search?query=apple&sort=desc> <https://example.com/search?query=apple&sort=desc>
     <https://example.com/search?query=apple&sort=desc>
     
     ```
     
     ここでは、`query=apple`と`sort=desc`というクエリパラメータが使われており、検索条件やソート方法を指定しています。
+
+![blog icon](/static/post/tech-blog/2024/11/1/blog-icon.png)
     
 - **使用用途**:
 クエリパラメータは、リソースそのものではなく、そのリソースに対するフィルタリング、検索条件、ソート方法、ページネーションなどの追加情報を渡す際に使われます。
