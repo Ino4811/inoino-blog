@@ -29,7 +29,7 @@ export const Header = () => {
   return (
     <header class={headerClass}>
       <div class={log}>
-        <img height="36px" src="/favicon.ico" />
+        <img height="36px" src="/static/favicon.ico" />
         <b> inoino-tech-blog</b>
       </div>
       <nav>

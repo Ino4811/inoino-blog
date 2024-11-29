@@ -1,0 +1,1 @@
+export const TECH_BLOG_PATH = "public/static/post/tech-blog";
