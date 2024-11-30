@@ -8,7 +8,7 @@ export type BlogMetadata = {
   title: string;
   date: string;
   tags: string[];
-} | undefined;
+};
 
 // TODO: 現状remark-frontmatterの構文は使用する予定がないため、remark-gfmのみを使用する想定
 const parseMarkdown = remark().use(remarkFrontmatter).use(remarkGfm);
@@ -32,7 +32,7 @@ export const filterOutYaml = (ast: Root): Root => {
   };
 };
 
-export const getMetadata = (ast: Root): BlogMetadata => {
+export const getMetadata = (ast: Root): BlogMetadata | undefined => {
   // YAML ノードを取得
   const metadataString = ast.children.find((node) => node.type === 'yaml')?.value;
 

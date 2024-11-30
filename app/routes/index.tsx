@@ -1,6 +1,7 @@
 import { css } from 'hono/css'
 import { createRoute } from 'honox/factory'
 import { getAllBlogUrlList, getBlogMetadataFromUrl, sortUrlByDate } from '../lib/blogUtil';
+import { BlogCard } from '../component/ui-parts/blogCard';
 
   
 export default createRoute( async(c) => {
@@ -14,10 +15,11 @@ export default createRoute( async(c) => {
       {sortedBlogUrlList.map(async (url) => {
         // urlからブログのメタデータを取得
         const metadata = await getBlogMetadataFromUrl(url);
+        if (!metadata) {
+          return null;
+        }
         return (
-          <div>
-            <a href={url}>{metadata?.title}</a>
-          </div>
+          <BlogCard url={url} metadata={metadata} />
         );
       })}
     </>
