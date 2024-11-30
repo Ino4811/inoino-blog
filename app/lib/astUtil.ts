@@ -39,3 +39,15 @@ export const getMetadata = (ast: Root): BlogMetadata | undefined => {
   // YAML ノードをパース
   return metadataString ? (yaml.load(metadataString) as BlogMetadata) : undefined;
 }
+
+export const getBlogDescription = (ast: Root): string => {
+  const description: string[] = [];
+  // ASTを走査して最初の段落を見つける
+  for (const node of ast.children) {
+    if (node.type === 'paragraph') {
+      // 段落のテキストを返す
+      description.push(node.children.map(child => 'value' in child ? child.value : '').join('')); 
+    }
+  }
+  return description.join('').slice(0, 200);
+}

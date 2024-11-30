@@ -1,6 +1,6 @@
 import { createRoute } from 'honox/factory';
 import { extractDateParamsFromPath, getAllBlogMdPaths, getBlogContent } from '../../../../../lib/blogUtil';
-import { filterOutYaml, getMetadata, mdParser } from '../../../../../lib/astUtil';
+import { filterOutYaml, getBlogDescription, getMetadata, mdParser } from '../../../../../lib/astUtil';
 import { ssgParams } from 'hono/ssg';
 import { TECH_BLOG_PATH } from '../../../../../lib/const';
 import { BlogContent } from '../../../../../component/ui-parts/blogContent';
@@ -21,10 +21,12 @@ export default createRoute(
   }),
   async (c) => {
     const { year, month, day, slug } = c.req.param();
+
     const blogContent = await getBlogContent({ year, month, day, slug });
     const postAst = blogContent ? await mdParser(blogContent) : undefined;
     const metadata = postAst ? getMetadata(postAst) : undefined;
     const contentAst = postAst ? filterOutYaml(postAst) : undefined;
+    const description = contentAst ? getBlogDescription(contentAst) : '';
 
     if (contentAst && metadata) {
       return c.render(
@@ -32,6 +34,11 @@ export default createRoute(
           <BlogHeader metadata={metadata} />
           <BlogContent contentAst={contentAst} />
         </>
+        ,
+        {
+          title: metadata.title,
+          description: description,
+        }
       )
     } else {
       return c.notFound();

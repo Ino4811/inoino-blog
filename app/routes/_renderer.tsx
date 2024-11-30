@@ -43,12 +43,13 @@ const globalClass = css`
   }
 `
 
-export default jsxRenderer(({ children, title }) => {
+export default jsxRenderer(({ children, title, description }) => {
   return (
     <html lang="ja">
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content={description} />
         <title>{title}</title>
         <link rel="icon" href="/favicon.ico" />
         <Script src="/app/client.ts" async />

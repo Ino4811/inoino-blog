@@ -23,5 +23,10 @@ export default createRoute( async(c) => {
         );
       })}
     </>
+    ,
+    {
+      title: "inoino-blog",
+      description: "inoino-blogのTopページです",
+    }
   )
 })
