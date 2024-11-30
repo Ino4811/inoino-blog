@@ -32,7 +32,7 @@ export const filterOutYaml = (ast: Root): Root => {
   };
 };
 
-export const getMetadata = (ast: Root): BlogMetadata | undefined => {
+export const getBlogMetadata = (ast: Root): BlogMetadata | undefined => {
   // YAML ノードを取得
   const metadataString = ast.children.find((node) => node.type === 'yaml')?.value;
 

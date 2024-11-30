@@ -33,7 +33,8 @@ export const Header = () => {
         <b> inoino-blog</b>
       </div>
       <nav>
-        <a href="/" class={linkClass}>Home</a>
+        <a href="/profile" class={linkClass}> Profile </a>
+        <a href="/" class={linkClass}> Home </a>
       </nav>
     </header>
   );

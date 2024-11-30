@@ -1,6 +1,6 @@
 import { createRoute } from 'honox/factory';
-import { extractDateParamsFromPath, getAllBlogMdPaths, getBlogContent } from '../../../../../lib/blogUtil';
-import { filterOutYaml, getBlogDescription, getMetadata, mdParser } from '../../../../../lib/astUtil';
+import { extractDateParamsFromMdPath, getAllBlogMdPaths, getBlogMdString } from '../../../../../lib/blogUtil';
+import { filterOutYaml, getBlogDescription, getBlogMetadata, mdParser } from '../../../../../lib/astUtil';
 import { ssgParams } from 'hono/ssg';
 import { TECH_BLOG_PATH } from '../../../../../lib/const';
 import { BlogContent } from '../../../../../component/ui-parts/blogContent';
@@ -14,7 +14,7 @@ export default createRoute(
 
     // 各パスからパラメータを抽出
     const params = paths
-      .map(extractDateParamsFromPath)
+      .map(extractDateParamsFromMdPath)
       .filter((param): param is { year: string; month: string; day: string; slug: string } => param !== null);
     
     return params;
@@ -22,9 +22,9 @@ export default createRoute(
   async (c) => {
     const { year, month, day, slug } = c.req.param();
 
-    const blogContent = await getBlogContent({ year, month, day, slug });
-    const postAst = blogContent ? await mdParser(blogContent) : undefined;
-    const metadata = postAst ? getMetadata(postAst) : undefined;
+    const mdString = await getBlogMdString({ year, month, day, slug });
+    const postAst = mdString ? await mdParser(mdString) : undefined;
+    const metadata = postAst ? getBlogMetadata(postAst) : undefined;
     const contentAst = postAst ? filterOutYaml(postAst) : undefined;
     const description = contentAst ? getBlogDescription(contentAst) : '';
 

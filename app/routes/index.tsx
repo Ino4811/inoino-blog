@@ -1,13 +1,13 @@
 import { css } from 'hono/css'
 import { createRoute } from 'honox/factory'
-import { getAllBlogUrlList, getBlogMetadataFromUrl, sortUrlByDate } from '../lib/blogUtil';
+import { getAllBlogUrlList, getBlogMetadataFromUrl, sortBlogUrlByDate } from '../lib/blogUtil';
 import { BlogCard } from '../component/ui-parts/blogCard';
 
   
 export default createRoute( async(c) => {
 
   const blogUrlList: string[] = (await getAllBlogUrlList()).filter((url): url is string => url !== undefined);
-  const sortedBlogUrlList = sortUrlByDate(blogUrlList);
+  const sortedBlogUrlList = sortBlogUrlByDate(blogUrlList);
 
   return c.render(
     <>
