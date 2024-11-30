@@ -4,6 +4,7 @@ const headerClass = css`
   background-color: #444444;
   color: #fff;
   padding: 20px 30px;
+  margin: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;

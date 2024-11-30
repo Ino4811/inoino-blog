@@ -5,6 +5,7 @@ const footerClass = css`
   color: #fff;
   text-align: center;
   padding: 15px 20px;
+  margin: 0;
   position: relative;
   bottom: 0;
 `;
