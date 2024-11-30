@@ -70,7 +70,8 @@ td {
 }
 th {
   font-weight: 700;
-  background: #d1d1d1;;
+  background: #e9e4e3;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
 }
 `;
 
