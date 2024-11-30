@@ -38,7 +38,7 @@ export const getAllBlogMdPaths = async (dir: string): Promise<string[]> => {
 
 // ブログコンテンツのパスからパラメータを抽出する関数
 export const extractDateParamsFromPath = (path: string) => {
-  const match = path.match(/public\/static\/post\/tech-blog\/(\d{4})\/(\d{1,2})\/(\d{1,2})\/(.+)\.md$/);
+  const match = path.match(/content\/post\/tech-blog\/(\d{4})\/(\d{1,2})\/(\d{1,2})\/(.+)\.md$/);
   if (match) {
     const [, year, month, day, slug] = match;
     return { year, month, day, slug };
