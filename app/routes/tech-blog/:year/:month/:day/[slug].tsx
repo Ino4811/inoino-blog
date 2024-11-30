@@ -1,5 +1,5 @@
 import { createRoute } from 'honox/factory';
-import { extractParamsFromPath, getAllBlogPaths, getBlogContent } from '../../../../../lib/blogUtil';
+import { extractDateParamsFromPath, getAllBlogMdPaths, getBlogContent } from '../../../../../lib/blogUtil';
 import { filterOutYaml, getMetadata, mdParser } from '../../../../../lib/astUtil';
 import { ssgParams } from 'hono/ssg';
 import { TECH_BLOG_PATH } from '../../../../../lib/const';
@@ -10,12 +10,11 @@ import { BlogHeader } from '../../../../../component/ui-parts/blogHeader';
 export default createRoute(
   ssgParams(async () => {
     // ブログコンテンツのファイルパス一覧を取得
-    const paths = await getAllBlogPaths(TECH_BLOG_PATH); // この関数は全てのブログ記事のパスを返すと仮定
-    console.log(paths)
+    const paths = await getAllBlogMdPaths(TECH_BLOG_PATH); // この関数は全てのブログ記事のパスを返すと仮定
 
     // 各パスからパラメータを抽出
     const params = paths
-      .map(extractParamsFromPath)
+      .map(extractDateParamsFromPath)
       .filter((param): param is { year: string; month: string; day: string; slug: string } => param !== null);
     
     return params;
