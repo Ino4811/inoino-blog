@@ -1,7 +1,7 @@
 import { css } from 'hono/css'
 import { createRoute } from 'honox/factory'
 import { ProfileCard } from '../../component/ui-parts/profileCard'
-import { getProfileContentString, getProfileMetadata } from '../../lib/utile'
+import { getCanonicalUrl, getProfileContentString, getProfileMetadata } from '../../lib/utile'
 import { filterOutYaml, mdParser } from '../../lib/astUtil'
 
   
@@ -24,6 +24,7 @@ export default createRoute(async (c) => {
     {
       title: "inoino-blog",
       description: "inoinoのProfileページです",
+      canonical: getCanonicalUrl(c),
     }
   )
 })

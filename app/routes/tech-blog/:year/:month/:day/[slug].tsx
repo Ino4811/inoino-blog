@@ -5,6 +5,7 @@ import { ssgParams } from 'hono/ssg';
 import { TECH_BLOG_PATH } from '../../../../../lib/const';
 import { BlogContent } from '../../../../../component/ui-parts/blogContent';
 import { BlogHeader } from '../../../../../component/ui-parts/blogHeader';
+import { getCanonicalUrl } from '../../../../../lib/utile';
 
 
 export default createRoute(
@@ -38,6 +39,7 @@ export default createRoute(
         {
           title: metadata.title,
           description: description,
+          canonical: getCanonicalUrl(c),
         }
       )
     } else {

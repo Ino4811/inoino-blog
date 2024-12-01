@@ -3,6 +3,7 @@ import {} from 'hono'
 type Head = {
   title?: string;
   description?: string;
+  canonical?: string;
 }
 
 declare module 'hono' {

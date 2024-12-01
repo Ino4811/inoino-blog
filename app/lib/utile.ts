@@ -1,6 +1,7 @@
 import { readFile } from 'fs/promises';
-import { PROFILE_MD_PATH } from './const';import { Root } from "mdast";
+import { PROFILE_MD_PATH, WEB_ROOT } from './const';import { Root } from "mdast";
 import yaml from 'js-yaml';
+import { Context, Env } from 'hono';
 
 export type ProfileMetadata = {
   name: string;
@@ -22,4 +23,8 @@ export const getProfileMetadata = (ast: Root): ProfileMetadata | undefined => {
 
   // YAML ノードをパース
   return metadataString ? (yaml.load(metadataString) as ProfileMetadata) : undefined;
+}
+
+export const getCanonicalUrl = (c: Context<Env, any, {}>) => {
+  return WEB_ROOT + c.req.path;
 }

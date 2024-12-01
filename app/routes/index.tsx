@@ -2,6 +2,7 @@ import { css } from 'hono/css'
 import { createRoute } from 'honox/factory'
 import { getAllBlogUrlList, getBlogMetadataFromUrl, sortBlogUrlByDate } from '../lib/blogUtil';
 import { BlogCard } from '../component/ui-parts/blogCard';
+import { getCanonicalUrl } from '../lib/utile';
 
   
 export default createRoute( async(c) => {
@@ -27,6 +28,7 @@ export default createRoute( async(c) => {
     {
       title: "inoino-blog",
       description: "inoino-blogのTopページです",
+      canonical: getCanonicalUrl(c),
     }
   )
 })

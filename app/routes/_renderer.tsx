@@ -41,7 +41,7 @@ const globalClass = css`
   }
 `
 
-export default jsxRenderer(({ children, title, description }) => {
+export default jsxRenderer(({ children, title, description, canonical }) => {
   return (
     <html lang="ja">
       <head>
@@ -50,6 +50,7 @@ export default jsxRenderer(({ children, title, description }) => {
         <meta name="description" content={description} />
         <title>{title}</title>
         <link rel="icon" href="/favicon.ico" />
+        <link rel="canonical" href={canonical} />
         <Script src="/app/client.ts" async />
         <Style>
           {globalClass}
