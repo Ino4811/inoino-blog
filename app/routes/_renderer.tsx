@@ -12,7 +12,7 @@ const globalClass = css`
   body {
     margin: 0;
     padding: 0;
-    background-color: #e7e5e1;
+    background-color: #f1f1f1;
   }
   main {
     width: min(900px, 90%);

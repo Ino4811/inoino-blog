@@ -6,10 +6,10 @@ const card = css`
 `;
 
 const content = css`
-  background-color: #eeeeee;
+  background-color: #f5f5f5;
   padding: 12px min(24px, 2vw);
   border-radius: min(6px, 2vw);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   margin: 24px 0;
   display: flex;
   flex-direction: column;
