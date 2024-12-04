@@ -20,12 +20,15 @@ const globalClass = css`
   }
   h1 {
     font-size: 1.5em;
+    margin-top: 1.75em;
   }
   h2 {
     font-size: 1.17em;
+    margin-top: 1.5em;
   }
   h3 {
     font-size: 1em;
+    margin-top: 1.17em;
   }
   h4 {
     font-size: 83em;
@@ -38,6 +41,14 @@ const globalClass = css`
   }
   a {
     word-break: break-all;
+  }
+  p {
+    line-height: 1.7;
+    margin: 0.5em 10px;
+  }
+  table {
+    margin: 1.2rem 16px;
+    font-size: 0.95em;
   }
 `
 
