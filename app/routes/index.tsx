@@ -11,11 +11,12 @@ export default createRoute( async(c) => {
   const sortedBlogUrlList = sortBlogUrlByDate(blogUrlList);
 
   return c.render(
-    <>
+    <div>
       <h1>記事一覧</h1>
       {sortedBlogUrlList.map(async (url) => {
         // urlからブログのメタデータを取得
         const metadata = await getBlogMetadataFromUrl(url);
+        console.log(metadata);
         if (!metadata) {
           return null;
         }
@@ -23,7 +24,7 @@ export default createRoute( async(c) => {
           <BlogCard url={url} metadata={metadata} />
         );
       })}
-    </>
+    </div>
     ,
     {
       title: "inoino-blog",
