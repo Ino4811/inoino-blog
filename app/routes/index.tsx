@@ -16,7 +16,6 @@ export default createRoute( async(c) => {
       {sortedBlogUrlList.map(async (url) => {
         // urlからブログのメタデータを取得
         const metadata = await getBlogMetadataFromUrl(url);
-        console.log(metadata);
         if (!metadata) {
           return null;
         }
