@@ -20,43 +20,41 @@ const code = css`
 
 // preタグのbackground-colorはstyleで指定されるため、!importantをつける
 const shiki = css`
-  :-hono-global {
-    pre {
-      margin: 1.3rem 0;
-      background: ${gray} !important;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      &::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      &::-webkit-scrollbar-thumb {
-        border-radius: 0.25rem;
-        background-color: rgba(0, 0, 0, 0.2);
-      }
-      border-radius: 0.4em;
-      word-break: normal; // iOSで折り返されるのを防ぐ
-      word-wrap: normal; // iOSで折り返されるのを防ぐ
-      /* flex + codeの隣に疑似要素を配置することで横スクロール時の右端の余白を作る */
-      display: flex;
-      &::after {
-        content: '';
-        width: 8px;
-        flex-shrink: 0;
-      }
-    } 
-    code {
-      margin: 0;
-      padding: 0;
-      background: transparent;
-      font-size: 0.9em;
-      color: #333;
-      display: block;
-      padding: 1.1rem; // このようにしないとpreのスクロールバーがコードに重なってしまう
-      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-      -webkit-font-smoothing: antialiased;
+  pre {
+    margin: 1.3rem 0;
+    background: ${gray} !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
     }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 0.25rem;
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+    border-radius: 0.4rem;
+    word-break: normal; // iOSで折り返されるのを防ぐ
+    word-wrap: normal; // iOSで折り返されるのを防ぐ
+    /* flex + codeの隣に疑似要素を配置することで横スクロール時の右端の余白を作る */
+    display: flex;
+    &::after {
+      content: '';
+      width: 8px;
+      flex-shrink: 0;
+    }
+  } 
+  code {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    font-size: 0.9rem;
+    color: #333;
+    display: block;
+    padding: 1.1rem; // このようにしないとpreのスクロールバーがコードに重なってしまう
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace,
+      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    -webkit-font-smoothing: antialiased;
   }
 `;
 

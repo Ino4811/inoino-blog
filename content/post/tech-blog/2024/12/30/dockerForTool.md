@@ -89,7 +89,7 @@ CMD touch /tmp/aaa.txt
 この状態で、DockerFileを実行してみます。
 
 ```bash
-docker build -t inoino-v1 .
+docker build -t inoino-v1
 docker run -p 80:80 -v ./:/tmp -it inoino-v1
 ```
 

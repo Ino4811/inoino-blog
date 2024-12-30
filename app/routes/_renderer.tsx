@@ -8,6 +8,8 @@ import { Footer } from '../component/layout/footer'
 const globalClass = css`
   html {
     font-family: Arial, Helvetica, sans-serif;
+    -webkit-text-size-adjust: 100%; /* Safari向けに文字サイズ調整を無効化 */
+    text-size-adjust: 100%; /* 他のブラウザ向け */
   }
   body {
     margin: 0;
@@ -31,7 +33,7 @@ const globalClass = css`
     margin-top: 1.17em;
   }
   h4 {
-    font-size: 83em;
+    font-size: 0.83em;
   }
   h5 {
     font-size: 0.67em;
