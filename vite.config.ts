@@ -28,6 +28,7 @@ export default defineConfig(({ mode }) => {
           'mdast-util-from-markdown',
           'remark-parse',
           'extend',
+          'shiki',
         ],
       }
     }
