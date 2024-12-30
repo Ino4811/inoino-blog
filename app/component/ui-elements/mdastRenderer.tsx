@@ -245,12 +245,12 @@ const LinkNode: FC<{ node: RootContentMap["link"] }> = async ({ node }) => {
 
   const title = doc.document.title;
   const description = doc.document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
-  const favicon = doc.document.querySelector('link[rel="icon"]')?.getAttribute('href') ?? '';
-
+  const favicon = doc.document.querySelector('link[rel="icon"]')?.getAttribute('href') || doc.document.querySelector('link[rel="shortcut icon"]')?.getAttribute('href') || '';
+  const faviconAbsoluteUrl = new URL(favicon, node.url).toString();
 
   return (
     <a href={node.url} target="_blank" rel="noopener noreferrer" class={linkCard}>
-      <img src={favicon} alt="icon" />
+      <img src={faviconAbsoluteUrl} alt="icon" />
       <span class={cardTitle}>{title}</span>
     </a>
   );
