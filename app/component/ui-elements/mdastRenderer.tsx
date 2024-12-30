@@ -1,7 +1,8 @@
 import { FC } from "hono/jsx";
 import type { RootContent, RootContentMap } from "mdast";
 import { css } from "hono/css";
-import { codeToHtml, createHighlighter } from "shiki"
+import { createHighlighter } from "shiki"
+import { JSDOM } from 'jsdom';
 
 const gray = "rgba(33, 90, 160, 0.07)";
 
@@ -202,10 +203,57 @@ const BlockQuoteNode: FC<{ node: RootContentMap["blockquote"] }> = ({
   );
 };
 
-const LinkNode: FC<{ node: RootContentMap["link"] }> = ({ node }) => {
+const linkCard = css`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  margin: 8px 0;
+  border: 1px solid #dddddd;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  img {
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
+  }
+  &:hover {
+    background: #f0f0f0;
+  }
+  &:active {
+    color:#4b4b4b;
+  }
+`;
+
+const cardTitle = css`
+  font-size: 16px;
+  font-weight: 600;
+  flex: 1 1 auto;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
+
+
+const LinkNode: FC<{ node: RootContentMap["link"] }> = async ({ node }) => {
+
+  const htmlRes = await fetch(node.url)
+  if (!htmlRes.ok) {
+    throw new Error(`Failed to fetch ${node.url}`);
+  }
+  const text = await htmlRes.text()
+  const doc = new JSDOM(text).window;
+
+  const title = doc.document.title;
+  const description = doc.document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
+  const favicon = doc.document.querySelector('link[rel="icon"]')?.getAttribute('href') ?? '';
+
+
   return (
-    <a href={node.url} target="_blank" rel="noreferrer">
-      <MdastRenderer nodes={node.children} />
+    <a href={node.url} target="_blank" rel="noopener noreferrer" class={linkCard}>
+      <img src={favicon} alt="icon" />
+      <span class={cardTitle}>{title}</span>
     </a>
   );
 };
@@ -269,6 +317,7 @@ const CodeNode: FC<{ node: RootContentMap["code"] }> = async ({ node }) => {
     theme: 'github-light',
     lang: node.lang || 'txt',
   })
+
   return (
     <div class={shiki} dangerouslySetInnerHTML={{ __html: code }} />
   );

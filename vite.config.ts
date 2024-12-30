@@ -29,6 +29,7 @@ export default defineConfig(({ mode }) => {
           'remark-parse',
           'extend',
           'shiki',
+          'jsdom',
         ],
       }
     }
