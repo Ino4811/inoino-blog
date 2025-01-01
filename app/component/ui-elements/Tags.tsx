@@ -14,7 +14,7 @@ const tagStyle = css`
 
 const tagsStyle = css`
   color: #666;
-  margin: 10px 0;
+  margin: 0;
   font-size: 16px;
   font-weight: 700;
   text-align: center;

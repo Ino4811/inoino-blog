@@ -7,6 +7,7 @@ const blogHeaderContainer = css`
   flex-direction: column;
   margin: min(52px, 4vw) 0;
   align-items: center;
+  gap: 8px;
 `;
 
 const title = css`
@@ -18,20 +19,10 @@ const date = css`
   display: flex;
   gap: 4px;
   color: #666;
-  margin: 10px 0;
+  margin: 0;
   font-size: 14px;
   font-weight: 700;
 `;
-
-const tags = css`
-  color: #666;
-  margin: 10px 0;
-  font-size: 16px;
-  font-weight: 700;
-  text-align: center;
-  display: flex;
-  gap: 10px;
-`
 
 type Props = {
   metadata: BlogMetadata;

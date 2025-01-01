@@ -2,7 +2,6 @@ import { createRoute } from 'honox/factory';
 import { extractDateParamsFromMdPath, getAllBlogMdPaths, getBlogMdString } from '../../../../../lib/blogUtil';
 import { filterOutYaml, getBlogDescription, getBlogMetadata, mdParser } from '../../../../../lib/astUtil';
 import { ssgParams } from 'hono/ssg';
-import { TECH_BLOG_PATH } from '../../../../../lib/const';
 import { BlogContent } from '../../../../../component/ui-parts/blogContent';
 import { BlogHeader } from '../../../../../component/ui-parts/blogHeader';
 import { getCanonicalUrl } from '../../../../../lib/utile';
@@ -11,7 +10,7 @@ import { getCanonicalUrl } from '../../../../../lib/utile';
 export default createRoute(
   ssgParams(async () => {
     // ブログコンテンツのファイルパス一覧を取得
-    const paths = await getAllBlogMdPaths(TECH_BLOG_PATH); // この関数は全てのブログ記事のパスを返すと仮定
+    const paths = await getAllBlogMdPaths(); // この関数は全てのブログ記事のパスを返すと仮定
 
     // 各パスからパラメータを抽出
     const params = paths

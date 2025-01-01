@@ -1,5 +1,6 @@
 import { css } from 'hono/css';
 import { BlogMetadata } from '../../lib/astUtil';
+import { BlogTags } from '../ui-elements/Tags';
 
 const card = css`
   text-decoration: none;
@@ -13,7 +14,7 @@ const content = css`
   margin: 24px 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   &:hover {
 	  cursor: pointer;
     transform: scale(1.01);
@@ -47,6 +48,9 @@ export const BlogCard = ({ metadata, url }: Props) => {
       <a class={card} href={url}>
         <div class={content}>
           <div class={title}>{metadata.title}</div>
+        {metadata.tags &&
+          <BlogTags tags={metadata.tags}/>
+        }
           <div class={date}>{metadata.date}</div>
         </div>
       </a>

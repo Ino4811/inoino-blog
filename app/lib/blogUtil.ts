@@ -19,7 +19,7 @@ export const getBlogMdString = async ({year, month, day, slug}: Param): Promise<
   }
 }
 
-export const getAllBlogMdPaths = async (dir: string): Promise<string[]> => {
+export const getAllBlogMdPaths = async (dir: string = TECH_BLOG_PATH): Promise<string[]> => {
   let results: string[] = [];
   const list = await readdir(dir, { withFileTypes: true });
   for (const file of list) {
