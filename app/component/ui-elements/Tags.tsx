@@ -9,6 +9,12 @@ const tagStyle = css`
   font-weight: 700;
   margin: 0;
   display: inline-block;
+  text-decoration: none;
+  z-index: 1;
+  vertical-align: text-bottom;
+  &:hover {
+    background-color: #555;
+  }
 `;
 
 
@@ -27,7 +33,10 @@ type Props = {
 };
 
 const BlogTag = ({ tag }: { tag: string }) => {
-  return <div class={tagStyle}>{tag}</div>;
+  const url = `/tags/${tag}`;
+  return (
+    <a href={url} class={tagStyle}>{tag}</a>
+  );
 }
 
 export const BlogTags = ({ tags }: Props) => {

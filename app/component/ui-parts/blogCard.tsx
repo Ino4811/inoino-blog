@@ -2,11 +2,13 @@ import { css } from 'hono/css';
 import { BlogMetadata } from '../../lib/astUtil';
 import { BlogTags } from '../ui-elements/Tags';
 
-const card = css`
-  text-decoration: none;
+const link = css`
+  position: absolute;
+  inset: 0;
 `;
 
 const content = css`
+  position: relative;
   background-color: #f5f5f5;
   padding: 12px min(24px, 2vw);
   border-radius: min(6px, 2vw);
@@ -45,14 +47,13 @@ type Props = {
 
 export const BlogCard = ({ metadata, url }: Props) => {
   return (
-      <a class={card} href={url}>
-        <div class={content}>
-          <div class={title}>{metadata.title}</div>
+      <div class={content}>
+        <a class={link} href={url}></a>
+        <div class={title}>{metadata.title}</div>
         {metadata.tags &&
           <BlogTags tags={metadata.tags}/>
         }
-          <div class={date}>{metadata.date}</div>
-        </div>
-      </a>
+        <div class={date}>{metadata.date}</div>
+      </div>
   );
 }

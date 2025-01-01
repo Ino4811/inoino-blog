@@ -2,6 +2,7 @@ import { readdir, readFile } from 'fs/promises';
 import path from 'path';
 import { TECH_BLOG_PATH } from './const';
 import { getBlogMetadata, mdParser } from './astUtil';
+import { url } from 'inspector';
 
 type Param = {
   year: string;
@@ -47,14 +48,14 @@ export const extractDateParamsFromMdPath = (path: string) => {
 };
 
 export const getAllBlogUrlList = async () => {
-  const paths = await getAllBlogMdPaths(TECH_BLOG_PATH);
+  const paths = await getAllBlogMdPaths();
   const urls = paths.map((path) => {
     const params = extractDateParamsFromMdPath(path);
     if (params) {
       const { year, month, day, slug } = params;
       return `/tech-blog/${year}/${month}/${day}/${slug}`;
     }
-  });
+  }).filter((url) => url !== undefined);
   return urls;
 };
 
@@ -114,3 +115,35 @@ export const sortBlogUrlByDate = (filePaths: string[]): string[] => {
     return dateA.day - dateB.day;
   });
 };
+
+export const getAllBlogTags = async () => {
+  const urls = await getAllBlogUrlList();
+  const tags = new Set<string>();
+
+  for (const url of urls) {
+    if (!url) continue;
+    const metadata = await getBlogMetadataFromUrl(url);
+    if (!metadata) continue;
+
+    metadata.tags.map((tag) => tags.add(tag));
+  }
+  return tags;
+}
+
+export const getBlogUrlListByTag = async (tag: string) => {
+  const urls = await getAllBlogUrlList();
+
+  const filteredUrls: string[] = [];
+  
+  for (const url of urls) {
+    if (!url) continue;
+    const metadata = await getBlogMetadataFromUrl(url);
+    if (!metadata) continue;
+    
+    if (metadata.tags.includes(tag)) {
+      filteredUrls.push(url);
+    }
+  }
+
+  return filteredUrls;
+}

@@ -1,7 +1,7 @@
 ---
 title: "SocketはTCP/IPの何なのか"
 date: "2024-12-3"
-tags: ["Network", "socket", "TCP/IP"]
+tags: ["network", "socket", "TCP・IP"]
 ---
 
 最近のネットワークの本を読んでネットワークを勉強しています。
