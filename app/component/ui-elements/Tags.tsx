@@ -26,6 +26,7 @@ const tagsStyle = css`
   text-align: center;
   display: flex;
   gap: 10px;
+  line-height: 1;
 `
 
 type Props = {
@@ -35,7 +36,9 @@ type Props = {
 const BlogTag = ({ tag }: { tag: string }) => {
   const url = `/tags/${tag}`;
   return (
-    <a href={url} class={tagStyle}>{tag}</a>
+    <a href={url} class={tagStyle}>
+      {tag}
+    </a>
   );
 }
 
