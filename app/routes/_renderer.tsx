@@ -45,7 +45,7 @@ const globalClass = css`
     word-break: break-all;
   }
   p {
-    line-height: 1.7;
+    line-height: 1.75;
     margin: 0.5em 10px;
   }
   table {

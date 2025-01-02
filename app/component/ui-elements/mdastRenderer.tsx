@@ -8,7 +8,7 @@ const gray = "rgba(33, 90, 160, 0.07)";
 
 const code = css`
   display: inline-block;
-  padding: 0.2em 0.4em;
+  padding: 0 0.4em;
   background: ${gray}; // $c-contrast と同じ色
   font-size: 0.85em;
   border-radius: 0.4em;
@@ -212,25 +212,26 @@ const linkCard = css`
   border: 1px solid #dddddd;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
   img {
-    width: 32px;
-    height: 32px;
+    width:24px;
+    height: 24px;
     margin-right: 8px;
   }
   &:hover {
     background: #f0f0f0;
   }
   &:active {
-    color:#4b4b4b;
+    color: #4b4b4b;
   }
 `;
 
 const cardTitle = css`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   flex: 1 1 auto;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  color: #333333;
 `;
 
 
