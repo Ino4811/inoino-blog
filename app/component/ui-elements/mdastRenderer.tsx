@@ -211,6 +211,7 @@ const linkCard = css`
   margin: 8px 0;
   border: 1px solid #dddddd;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  text-decoration: none;
   img {
     width:24px;
     height: 24px;
