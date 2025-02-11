@@ -4,6 +4,7 @@ import { css } from "hono/css";
 import { createHighlighter } from "shiki"
 import { JSDOM } from 'jsdom';
 import { TECH_BLOG_IMAGE_PATH } from "../../lib/const";
+import { chromium } from "playwright";
 
 const gray = "rgba(33, 90, 160, 0.07)";
 
@@ -238,23 +239,49 @@ const cardTitle = css`
 
 
 const LinkNode: FC<{ node: RootContentMap["link"] }> = async ({ node }) => {
-
-  const htmlRes = await fetch(node.url)
+  console.log(`creating linkcard...${node.url}`);
+  const htmlRes = await fetch(node.url);
   if (!htmlRes.ok) {
     throw new Error(`Failed to fetch ${node.url}`);
   }
-  const text = await htmlRes.text()
+  const text = await htmlRes.text();
   const doc = new JSDOM(text).window;
 
-  const title = doc.document.title;
-  const description = doc.document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
-  const favicon = doc.document.querySelector('link[rel="icon"]')?.getAttribute('href') || doc.document.querySelector('link[rel="shortcut icon"]')?.getAttribute('href') || '';
-  const faviconAbsoluteUrl = new URL(favicon, node.url).toString();
+  const { title, faviconAbsoluteUrl } = await (async () => {
+    // doc.document.title が存在するならば JSDOM で処理
+    if (doc.document.title) {
+      const title = doc.document.title;
+      const favicon =
+        doc.document.querySelector('link[rel="icon"]')?.getAttribute('href') ||
+        doc.document.querySelector('link[rel="shortcut icon"]')?.getAttribute('href') ||
+        '';
+      return { title, faviconAbsoluteUrl: new URL(favicon, node.url).toString() };
+    }
+    // タイトルが取得できなければ Playwright を利用
+    const browser = await chromium.launch();
+    const page = await browser.newPage();
+
+    await page.goto(node.url, {
+      waitUntil: 'networkidle',
+      timeout: 60000,
+    });
+
+    const title = await page.title();
+
+    const faviconElement =
+      (await page.$('link[rel="icon"]')) ||
+      (await page.$('link[rel="shortcut icon"]'));
+    const favicon = faviconElement ? ((await faviconElement.getAttribute('href')) ?? '') : '';
+    const faviconAbsoluteUrl = favicon ? new URL(favicon, node.url).toString() : '';
+
+    await browser.close();
+    return { title, faviconAbsoluteUrl };
+  })();
 
   return (
-    <a href={node.url} target="_blank" rel="noopener noreferrer" class={linkCard}>
+    <a href={node.url} target="_blank" rel="noopener noreferrer" className={linkCard}>
       <img src={faviconAbsoluteUrl} alt="icon" />
-      <span class={cardTitle}>{title}</span>
+      <span className={cardTitle}>{title}</span>
     </a>
   );
 };

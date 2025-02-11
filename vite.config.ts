@@ -30,6 +30,8 @@ export default defineConfig(({ mode }) => {
           'extend',
           'shiki',
           'jsdom',
+          'playwright',
+          "axios",
         ],
       }
     }
