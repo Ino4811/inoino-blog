@@ -3,6 +3,7 @@ import type { RootContent, RootContentMap } from "mdast";
 import { css } from "hono/css";
 import { createHighlighter } from "shiki"
 import { JSDOM } from 'jsdom';
+import { TECH_BLOG_IMAGE_PATH } from "../../lib/const";
 
 const gray = "rgba(33, 90, 160, 0.07)";
 
@@ -301,9 +302,7 @@ const StrongNode: FC<{ node: RootContentMap["strong"] }> = ({ node }) => {
 };
 
 const ImageNode: FC<{ node: RootContentMap["image"] }> = ({ node }) => {
-  // TODO srcの設定はどうするか考える
-  // return <img src={`${ASSETS_PREFIX_PATH}${node.url}`} alt={node.alt ?? ""} />;
-  return <img width={'auto'} height={'auto'} style={{ display: 'block', margin: '0 auto', maxHeight: '400px', maxWidth: '100%'}} src={`${node.url}`} alt={node.alt ?? ""} />;
+  return <img width={'auto'} height={'auto'} style={{ display: 'block', margin: '0 auto', maxHeight: '600px', maxWidth: '100%'}} src={`${TECH_BLOG_IMAGE_PATH}${node.url}`} alt={node.alt ?? ""} />;
 };
 
 const CodeNode: FC<{ node: RootContentMap["code"] }> = async ({ node }) => {
