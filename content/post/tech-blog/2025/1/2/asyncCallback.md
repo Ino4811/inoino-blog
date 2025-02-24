@@ -12,13 +12,13 @@ mapやfilter関数のcallbackに非同期関数を設定してうまく動かな
 
 ```tsx
 const returnPromise = async () => {
-	return new Promise<number>(
-		(resolve) => {
-			setTimeout(() => {
-				resolve(100);
-			}, 3000);
-		}
-	);
+    return new Promise<number>(
+        (resolve) => {
+            setTimeout(() => {
+                resolve(100);
+            }, 3000);
+        }
+    );
 }
 
 const main = async () => {
@@ -37,13 +37,13 @@ main();
 
 ```tsx
 const returnPromise = async () => {
-	return new Promise<number>(
-		(resolve) => {
-			setTimeout(() => {
-				resolve(100);
-			}, 3000);
-		}
-	);
+    return new Promise<number>(
+        (resolve) => {
+            setTimeout(() => {
+                resolve(100);
+            }, 3000);
+        }
+    );
 }
 
 const main = async () => {
@@ -119,14 +119,14 @@ https://qiita.com/hnw/items/f104a1079906fc5c2a96
 ```tsx
 const main = async () => {
     const array = [1,35,100];
-	  const filteredArray = [];
+    const filteredArray = [];
     for (const value of array){
-	    const num = await returnPromise();
-	    if(value === num){
-		    filteredArray.push(value);
-	    }
-	  }
-    
+        const num = await returnPromise();
+        if(value === num){
+            filteredArray.push(value);
+        }
+    }
+
     console.log(filteredArray);
 }
 ```
