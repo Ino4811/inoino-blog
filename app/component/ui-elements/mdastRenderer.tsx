@@ -8,83 +8,6 @@ import { chromium } from "playwright";
 
 const gray = "rgba(33, 90, 160, 0.07)";
 
-const code = css`
-  display: inline-block;
-  padding: 0 0.4em;
-  background: ${gray}; // $c-contrast と同じ色
-  font-size: 0.85em;
-  border-radius: 0.4em;
-  vertical-align: 0.08em;
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-`;
-
-// preタグのbackground-colorはstyleで指定されるため、!importantをつける
-const shiki = css`
-  pre {
-    margin: 1.3rem 0;
-    background: ${gray} !important;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    &::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    &::-webkit-scrollbar-thumb {
-      border-radius: 0.25rem;
-      background-color: rgba(0, 0, 0, 0.2);
-    }
-    border-radius: 0.4rem;
-    word-break: normal; // iOSで折り返されるのを防ぐ
-    word-wrap: normal; // iOSで折り返されるのを防ぐ
-    /* flex + codeの隣に疑似要素を配置することで横スクロール時の右端の余白を作る */
-    display: flex;
-    &::after {
-      content: '';
-      width: 8px;
-      flex-shrink: 0;
-    }
-  } 
-  code {
-    margin: 0;
-    padding: 0;
-    background: transparent;
-    font-size: 0.9rem;
-    color: #333;
-    display: block;
-    padding: 1.1rem; // このようにしないとpreのスクロールバーがコードに重なってしまう
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace,
-      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-    -webkit-font-smoothing: antialiased;
-  }
-`;
-
-const table = css`
-table {
-  margin: 1.2rem auto;
-  width: auto;
-  border-collapse: collapse;
-  font-size: 0.95em;
-  line-height: 1.5;
-  word-break: normal; // Layout will break without this.
-  display: block;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-}
-th,
-td {
-  padding: 0.5rem;
-  background: #f7f7f7;
-}
-th {
-  font-weight: 700;
-  background: #e9e4e3;
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
-}
-`;
-
-
 type Props = {
   key?: string;
   nodes: RootContent[];
@@ -187,6 +110,18 @@ const HeadingNode: FC<{ node: RootContentMap["heading"] }> = ({ node }) => {
   );
 };
 
+const code = css`
+  display: inline-block;
+  padding: 0 0.4em;
+  background: ${gray}; // $c-contrast と同じ色
+  font-size: 0.85em;
+  border-radius: 0.4em;
+  vertical-align: 0.08em;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+`;
+
 const InlineCodeNode: FC<{ node: RootContentMap["inlineCode"] }> = ({
   node,
 }) => {
@@ -214,17 +149,18 @@ const linkCard = css`
   border: 1px solid #dddddd;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
   text-decoration: none;
-  img {
-    width:24px;
-    height: 24px;
-    margin-right: 8px;
-  }
   &:hover {
     background: #f0f0f0;
   }
   &:active {
     color: #4b4b4b;
   }
+`;
+
+const linkCardImage = css`
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
 `;
 
 const cardTitle = css`
@@ -306,7 +242,7 @@ const LinkNode: FC<{ node: RootContentMap["link"] }> = async ({ node }) => {
 
   return (
     <a href={node.url} target="_blank" rel="noopener noreferrer" className={linkCard}>
-      <img src={faviconAbsoluteUrl} alt="icon" />
+      <img className={linkCardImage} src={faviconAbsoluteUrl} alt="icon" />
       <span className={cardTitle}>{title}</span>
     </a>
   );
@@ -358,6 +294,50 @@ const ImageNode: FC<{ node: RootContentMap["image"] }> = ({ node }) => {
   return <img width={'auto'} height={'auto'} style={{ display: 'block', margin: '0 auto', maxHeight: '600px', maxWidth: '100%'}} src={`${TECH_BLOG_IMAGE_PATH}${node.url}`} alt={node.alt ?? ""} />;
 };
 
+
+// preタグのbackground-colorはstyleで指定されるため、!importantをつける
+const shiki = css`
+  :-hono-global {
+    pre {
+      margin: 1.3rem 0;
+      background: ${gray} !important;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      &::-webkit-scrollbar-thumb {
+        border-radius: 0.25rem;
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+      border-radius: 0.4rem;
+      word-break: normal; // iOSで折り返されるのを防ぐ
+      word-wrap: normal; // iOSで折り返されるのを防ぐ
+      /* flex + codeの隣に疑似要素を配置することで横スクロール時の右端の余白を作る */
+      display: flex;
+      &::after {
+        content: '';
+        width: 8px;
+        flex-shrink: 0;
+      }
+    } 
+    code {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      font-size: 0.9rem;
+      color: #333;
+      display: block;
+      padding: 1.1rem; // このようにしないとpreのスクロールバーがコードに重なってしまう
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+      -webkit-font-smoothing: antialiased;
+    }
+  }
+`;
+
+
 const CodeNode: FC<{ node: RootContentMap["code"] }> = async ({ node }) => {
 
   const highlighter = await createHighlighter({
@@ -382,6 +362,33 @@ const DeleteNode: FC<{ node: RootContentMap["delete"] }> = ({ node }) => {
     </del>
   );
 };
+
+
+const table = css`
+  :-hono-global {
+    table {
+      margin: 1.2rem auto;
+      width: auto;
+      border-collapse: collapse;
+      font-size: 0.95em;
+      line-height: 1.5;
+      word-break: normal; // Layout will break without this.
+      display: block;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    th,
+    td {
+      padding: 0.5rem;
+      background: #f7f7f7;
+    }
+    th {
+      font-weight: 700;
+      background: #e9e4e3;
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+    }
+  }
+`;
 
 const TableNode: FC<{ node: RootContentMap["table"] }> = ({ node }) => {
   const [headRow, ...bodyRows] = node.children;
