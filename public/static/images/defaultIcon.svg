@@ -1,0 +1,10 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景のドキュメント -->
+  <rect x="8" y="8" width="48" height="48" rx="4" fill="#E0E0E0"/>
+  <!-- 折り返し部分 -->
+  <path d="M40 8 L56 24 H40 V8 Z" fill="#C0C0C0"/>
+  <!-- テキストラインのイメージ -->
+  <rect x="16" y="28" width="32" height="4" fill="#B0B0B0"/>
+  <rect x="16" y="36" width="32" height="4" fill="#B0B0B0"/>
+  <rect x="16" y="44" width="32" height="4" fill="#B0B0B0"/>
+</svg>

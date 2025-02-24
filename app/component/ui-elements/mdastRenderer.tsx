@@ -238,45 +238,71 @@ const cardTitle = css`
 `;
 
 
-const LinkNode: FC<{ node: RootContentMap["link"] }> = async ({ node }) => {
-  console.log(`creating linkcard...${node.url}`);
-  const htmlRes = await fetch(node.url);
+const getIconByJsdom = async ( nodeUrl: string ) => {
+  const htmlRes = await fetch(nodeUrl);
   if (!htmlRes.ok) {
-    throw new Error(`Failed to fetch ${node.url}`);
+    throw new Error(`Failed to fetch ${nodeUrl}`);
   }
   const text = await htmlRes.text();
   const doc = new JSDOM(text).window;
+  const title = doc.document.title;
+  const favicon =
+    doc.document.querySelector('link[rel="icon"]')?.getAttribute('href') ||
+    doc.document.querySelector('link[rel="shortcut icon"]')?.getAttribute('href') ||
+    '';
+  return { title, faviconAbsoluteUrl: favicon ? new URL(favicon, nodeUrl).toString() : '' };
+}
 
-  const { title, faviconAbsoluteUrl } = await (async () => {
-    // doc.document.title が存在するならば JSDOM で処理
-    if (doc.document.title) {
-      const title = doc.document.title;
-      const favicon =
-        doc.document.querySelector('link[rel="icon"]')?.getAttribute('href') ||
-        doc.document.querySelector('link[rel="shortcut icon"]')?.getAttribute('href') ||
-        '';
-      return { title, faviconAbsoluteUrl: new URL(favicon, node.url).toString() };
-    }
-    // タイトルが取得できなければ Playwright を利用
-    const browser = await chromium.launch();
-    const page = await browser.newPage();
+const getIconByPlaywright = async (url: string) => {
 
-    await page.goto(node.url, {
-      waitUntil: 'networkidle',
-      timeout: 60000,
-    });
+  console.log(`getIconByPlaywright...${url}`);
+  
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
 
-    const title = await page.title();
+  console.log(`goto...${url}`);
 
-    const faviconElement =
-      (await page.$('link[rel="icon"]')) ||
-      (await page.$('link[rel="shortcut icon"]'));
-    const favicon = faviconElement ? ((await faviconElement.getAttribute('href')) ?? '') : '';
-    const faviconAbsoluteUrl = favicon ? new URL(favicon, node.url).toString() : '';
+  await page.goto(url, {
+    waitUntil: 'networkidle',
+    timeout: 6000000,
+  });
 
-    await browser.close();
-    return { title, faviconAbsoluteUrl };
-  })();
+  console.log(`getting data...${url}`);
+
+  const title = await page.title();
+
+  const faviconElement =
+    (await page.$('link[rel="icon"]')) ||
+    (await page.$('link[rel="shortcut icon"]'));
+  const favicon = faviconElement ? ((await faviconElement.getAttribute('href')) ?? '') : '';
+
+  console.log(`getting data...${url}`);
+  
+  await browser.close();
+  
+  console.log(`got data and close browser...${url}`);
+
+  return { title, faviconAbsoluteUrl: favicon ? new URL(favicon, url).toString() : '' };
+}
+
+const fetchIcon = async (url: string) => {
+  const jsdomResult = await getIconByJsdom(url);
+  if (jsdomResult.title && jsdomResult.faviconAbsoluteUrl) return jsdomResult;
+
+  const playwrightResult = await getIconByPlaywright(url);
+  if (playwrightResult.title && playwrightResult.faviconAbsoluteUrl) return playwrightResult;
+
+  return {
+    title: url,
+    faviconAbsoluteUrl: `/static/images/defaultIcon.svg`,
+  };
+};
+
+
+const LinkNode: FC<{ node: RootContentMap["link"] }> = async ({ node }) => {
+  console.log(`creating linkcard...${node.url}`);
+
+  const { title, faviconAbsoluteUrl } = await fetchIcon(node.url);
 
   return (
     <a href={node.url} target="_blank" rel="noopener noreferrer" className={linkCard}>
