@@ -5,12 +5,14 @@
     "dev": "vite",
     "build": "vite build --mode client && vite build",
     "preview": "wrangler pages dev",
-    "deploy": "$npm_execpath run build && wrangler pages deploy"
+    "deploy": "$npm_execpath run build && wrangler pages deploy",
+    "non-build-deploy": "wrangler pages deploy"
   },
   "private": true,
   "dependencies": {
     "@hono/vite-ssg": "^0.1.0",
     "@types/mdast": "^4.0.4",
+    "axios": "^1.8.1",
     "hono": "^4.6.15",
     "honox": "^0.1.27",
     "js-yaml": "^4.1.0",

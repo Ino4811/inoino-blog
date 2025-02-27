@@ -5,6 +5,7 @@ import { createHighlighter } from "shiki"
 import { JSDOM } from 'jsdom';
 import { TECH_BLOG_IMAGE_PATH } from "../../lib/const";
 import { chromium } from "playwright";
+import axios from 'axios';
 
 const gray = "rgba(33, 90, 160, 0.07)";
 
@@ -174,64 +175,106 @@ const cardTitle = css`
 `;
 
 
-const getIconByJsdom = async ( nodeUrl: string ) => {
-  const htmlRes = await fetch(nodeUrl);
-  if (!htmlRes.ok) {
-    throw new Error(`Failed to fetch ${nodeUrl}`);
+const getIconByJsdom = async (nodeUrl: string, retryCount = 3) => {
+  for (let i = 0; i < retryCount; i++) {
+    try {
+      const response = await axios.get(nodeUrl, {
+        timeout: 50000, // 5秒でタイムアウト
+        maxRedirects: 5,
+      });
+      
+      if (response.status !== 200) {
+        throw new Error(`Failed to fetch ${nodeUrl}`);
+      }
+
+      const text = response.data;
+      const doc = new JSDOM(text).window;
+      const title = doc.document.title;
+      const favicon =
+        doc.document.querySelector('link[rel="icon"]')?.getAttribute('href') ||
+        doc.document.querySelector('link[rel="shortcut icon"]')?.getAttribute('href') ||
+        '';
+      return { title, faviconAbsoluteUrl: favicon ? new URL(favicon, nodeUrl).toString() : '' };
+    } catch (error) {
+      if (i === retryCount - 1) {
+        console.error(`Failed to fetch ${nodeUrl} after ${retryCount} retries:`, error);
+        return {
+          title: nodeUrl,
+          faviconAbsoluteUrl: `/static/images/defaultIcon.svg`,
+        };
+      }
+      console.warn(`Retry ${i + 1}/${retryCount} for ${nodeUrl}`);
+      await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1))); // 指数バックオフ
+    }
   }
-  const text = await htmlRes.text();
-  const doc = new JSDOM(text).window;
-  const title = doc.document.title;
-  const favicon =
-    doc.document.querySelector('link[rel="icon"]')?.getAttribute('href') ||
-    doc.document.querySelector('link[rel="shortcut icon"]')?.getAttribute('href') ||
-    '';
-  return { title, faviconAbsoluteUrl: favicon ? new URL(favicon, nodeUrl).toString() : '' };
-}
+  return {
+    title: nodeUrl,
+    faviconAbsoluteUrl: `/static/images/defaultIcon.svg`,
+  };
+};
 
-const getIconByPlaywright = async (url: string) => {
+const getIconByPlaywright = async (url: string, retryCount = 2) => {
+  let browser;
+  for (let i = 0; i < retryCount; i++) {
+    try {
+      browser = await chromium.launch();
+      const page = await browser.newPage();
+      
+      await page.goto(url, {
+        waitUntil: 'networkidle',
+        timeout: 10000000, // 10秒でタイムアウト
+      });
 
-  console.log(`getIconByPlaywright...${url}`);
-  
-  const browser = await chromium.launch();
-  const page = await browser.newPage();
+      const title = await page.title();
 
-  console.log(`goto...${url}`);
+      const faviconElement =
+        (await page.$('link[rel="icon"]')) ||
+        (await page.$('link[rel="shortcut icon"]'));
+      const favicon = faviconElement ? ((await faviconElement.getAttribute('href')) ?? '') : '';
 
-  await page.goto(url, {
-    waitUntil: 'networkidle',
-    timeout: 6000000,
-  });
-
-  console.log(`getting data...${url}`);
-
-  const title = await page.title();
-
-  const faviconElement =
-    (await page.$('link[rel="icon"]')) ||
-    (await page.$('link[rel="shortcut icon"]'));
-  const favicon = faviconElement ? ((await faviconElement.getAttribute('href')) ?? '') : '';
-
-  console.log(`getting data...${url}`);
-  
-  await browser.close();
-  
-  console.log(`got data and close browser...${url}`);
-
-  return { title, faviconAbsoluteUrl: favicon ? new URL(favicon, url).toString() : '' };
-}
-
-const fetchIcon = async (url: string) => {
-  const jsdomResult = await getIconByJsdom(url);
-  if (jsdomResult.title && jsdomResult.faviconAbsoluteUrl) return jsdomResult;
-
-  const playwrightResult = await getIconByPlaywright(url);
-  if (playwrightResult.title && playwrightResult.faviconAbsoluteUrl) return playwrightResult;
-
+      await browser.close();
+      
+      return { title, faviconAbsoluteUrl: favicon ? new URL(favicon, url).toString() : '' };
+    } catch (error) {
+      if (browser) {
+        await browser.close();
+      }
+      if (i === retryCount - 1) {
+        console.error(`Failed to fetch ${url} using Playwright after ${retryCount} retries:`, error);
+        return {
+          title: url,
+          faviconAbsoluteUrl: `/static/images/defaultIcon.svg`,
+        };
+      }
+      console.warn(`Retry ${i + 1}/${retryCount} for ${url} using Playwright`);
+      await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1))); // 指数バックオフ
+    }
+  }
   return {
     title: url,
     faviconAbsoluteUrl: `/static/images/defaultIcon.svg`,
   };
+};
+
+const fetchIcon = async (url: string) => {
+  try {
+    const jsdomResult = await getIconByJsdom(url);
+    if (jsdomResult.title && jsdomResult.faviconAbsoluteUrl) return jsdomResult;
+
+    const playwrightResult = await getIconByPlaywright(url);
+    if (playwrightResult.title && playwrightResult.faviconAbsoluteUrl) return playwrightResult;
+
+    return {
+      title: playwrightResult.title || url,
+      faviconAbsoluteUrl: playwrightResult.faviconAbsoluteUrl || `/static/images/defaultIcon.svg`,
+    };
+  } catch (error) {
+    console.error('Error in fetchIcon:', error);
+    return {
+      title: url,
+      faviconAbsoluteUrl: `/static/images/defaultIcon.svg`,
+    };
+  }
 };
 
 
