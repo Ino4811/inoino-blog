@@ -1,7 +1,7 @@
 ---
 title: "0.0.0.0と127.0.0.1とlocalhost"
 date: "2025-2-24"
-tags: ["network", "socket", "TCP・IP"]
+tags: ["network", "TCP・IP"]
 ---
 
 Webの開発していて同一ネットワークからiPadで開発サーバーにアクセスしたいと思ったときに、`0.0.0.0`と`127.0.0.1`とlocalhostの違いで詰まったのでそのメモ。
